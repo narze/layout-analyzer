@@ -1,0 +1,28 @@
+on:
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  sync_with_upstream:
+    runs-on: ubuntu-latest
+    name: Sync main with upstream latest
+
+    steps:
+    - name: Checkout main
+      uses: actions/checkout@v2
+      with:
+        ref: main
+        
+    - name: Pull upstream changes
+      id: sync
+      uses: aormsby/Fork-Sync-With-Upstream-action@v2.2
+      with:
+        upstream_repository: Manoonchai/layout-analyzer
+        upstream_branch: main
+        target_branch: main
+        git_pull_args: '--allow-unrelated-histories'
+        git_push_args: '--force'
+        git_pull_rebase_config: 'true'
+
+    - name: Timestamp
+      run: date
